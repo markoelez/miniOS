@@ -1,0 +1,13 @@
+.vscode/
+*.o
+*.bin
+*.obj
+*.elf
+*.a
+*.dll
+*.so
+*.so.*
+*.i*86
+*.x86_64
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
