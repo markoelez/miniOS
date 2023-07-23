@@ -1,3 +1,5 @@
+#include "vga.h"
+
 #define VGA_CTRL_REGISTER 0x3d4
 #define VGA_DATA_REGISTER 0x3d5
 #define VGA_OFFSET_LOW 0x0f
