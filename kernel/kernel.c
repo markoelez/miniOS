@@ -1,11 +1,11 @@
-#include "drivers/vga.h"
+#include "../drivers/screen.h"
 
 
 int main() {
 
     clear_screen();
 
-    print("Hello World!\n");
+    kprint("Hello, world");
 
     return 0;
 }
