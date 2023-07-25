@@ -10,7 +10,6 @@
 ; 
 ; After executing interrupt 0x13, the carry flag (CF) can be checked. If CF is set, an error occurred and the ah register will contain an error code.
 
-
 disk_load:
     pusha
     push dx

@@ -27,7 +27,8 @@ int get_cursor_offset()
     return offset * 2;
 }
 
-void set_cursor_offset(int offset) {
+void set_cursor_offset(int offset)
+{
     offset /= 2;
     port_byte_out(REG_SCREEN_CTRL, 14);
     port_byte_out(REG_SCREEN_DATA, (uint8)(offset >> 8));
@@ -51,14 +52,33 @@ int print_char(char c, int row, int col, char attr)
     if (row >= 0 && col >= 0) offset = get_offset(row, col);
     else offset = get_cursor_offset();
 
-    if (c == '\n') {
+    if (c == '\n')
+    {
         row = get_offset_row(offset);
         offset = get_offset(row + 1, 0);
-    } else {
+    }
+    else
+    {
         screen[offset] = c;
         screen[offset + 1] = attr;
         offset += 2;
     }
+
+    if (offset >= MAX_ROWS * MAX_COLS * 2)
+    {
+        int i;
+        for (i = 1; i < MAX_ROWS; ++i) 
+            memcpy(get_offset(i, 0) + VIDEO_ADDRESS,
+                   get_offset(i - 1, 0) + VIDEO_ADDRESS,
+                   MAX_COLS * 2);
+
+        char* last_line = get_offset(MAX_ROWS - 1, 0) + VIDEO_ADDRESS;
+        for (i = 0; i < MAX_COLS * 2; ++i)
+            last_line[i] = 0;
+
+        offset -= 2 * MAX_COLS;
+    }
+
     set_cursor_offset(offset);
     return offset;
 }
@@ -87,7 +107,8 @@ void kprint_at(char* str, int row, int col)
     }
 }
 
-void kprint(char* str) {
+void kprint(char* str)
+{
     kprint_at(str, -1, -1);
 }
 
@@ -97,7 +118,8 @@ void clear_screen()
     int i;
     char* screen = VIDEO_ADDRESS;
 
-    for (int i = 0; i < screen_size; i++) {
+    for (int i = 0; i < screen_size; i++)
+    {
         screen[i * 2] = ' ';
         screen[i * 2 + 1] = WHITE_ON_BLACK;
     }

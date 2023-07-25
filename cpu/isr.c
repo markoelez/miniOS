@@ -40,6 +40,34 @@ void isr_install()
    set_idt_gate(30, (uint32)isr30);
    set_idt_gate(31, (uint32)isr31);
 
+   port_byte_out(0x20, 0x11);
+   port_byte_out(0xA0, 0x11);
+   port_byte_out(0x21, 0x20);
+   port_byte_out(0xA1, 0x28);
+   port_byte_out(0x21, 0x04);
+   port_byte_out(0xA1, 0x02);
+   port_byte_out(0x21, 0x01);
+   port_byte_out(0xA1, 0x01);
+   port_byte_out(0x21, 0x0);
+   port_byte_out(0xA1, 0x0); 
+
+   set_idt_gate(32, (uint32)irq0);
+   set_idt_gate(33, (uint32)irq1);
+   set_idt_gate(34, (uint32)irq2);
+   set_idt_gate(35, (uint32)irq3);
+   set_idt_gate(36, (uint32)irq4);
+   set_idt_gate(37, (uint32)irq5);
+   set_idt_gate(38, (uint32)irq6);
+   set_idt_gate(39, (uint32)irq7);
+   set_idt_gate(40, (uint32)irq8);
+   set_idt_gate(41, (uint32)irq9);
+   set_idt_gate(42, (uint32)irq10);
+   set_idt_gate(43, (uint32)irq11);
+   set_idt_gate(44, (uint32)irq12);
+   set_idt_gate(45, (uint32)irq13);
+   set_idt_gate(46, (uint32)irq14);
+   set_idt_gate(47, (uint32)irq15);
+
    set_idt();
 }
 
@@ -82,7 +110,8 @@ char *exception_messages[] = {
    "Reserved"
 };
 
-void isr_handler(registers_t r) {
+void isr_handler(registers_t r)
+{
    kprint("received interrupt: ");
    char s[3];
    itoa(r.int_no, s);
@@ -92,17 +121,19 @@ void isr_handler(registers_t r) {
    kprint("\n");
 }
 
-void register_interrupt_handler(uint8 n, isr_t handler) {
+void register_interrupt_handler(uint8 n, isr_t handler)
+{
     interrupt_handlers[n] = handler;
 }
 
-void irq_handler(registers_t r) {
-   
+void irq_handler(registers_t r)
+{
    if (r.int_no >= 40) port_byte_out(0xA0, 0x20);
 
    port_byte_out(0x20, 0x20);
 
-   if (interrupt_handlers[r.int_no] != 0) {
+   if (interrupt_handlers[r.int_no] != 0)
+   {
       isr_t handler = interrupt_handlers[r.int_no];
       handler(r);
    }

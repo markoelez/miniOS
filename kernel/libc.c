@@ -1,7 +1,7 @@
 #include "libc.h"
 
 
-void itoa(int n, char str[])
+void itoa(int n, char* s)
 {
     int sign;
     if ((sign = n) < 0) n = -n;
@@ -9,9 +9,34 @@ void itoa(int n, char str[])
     int i = 0;
     do
     {
-        str[i++] = '0' + (n % 10);
+        s[i++] = '0' + (n % 10);
     } while ((n /= 10) > 0);
 
-    if (sign < 0) str[i++] = '-';
-    str[i] = '\0';
+    if (sign < 0) s[i++] = '-';
+    s[i] = '\0';
+
+    reverse(s);
 }
+
+int strlen(char* s)
+{
+    int i = 0;
+    while (s[i] != '\0') ++i;
+    return i;
+}
+
+void reverse(char* s)
+{
+    int i, j;
+    for (i = 0, j = strlen(s) - 1; i < j; ++i, --j)
+    {
+        char t = s[i];
+        s[i] = s[j];
+        s[j] = t;
+    }
+};
+
+void memcpy(char* src, char* dst, int nbytes)
+{
+    for (int i = 0; i < nbytes; ++i) *(dst + i) = *(src + i);
+};
