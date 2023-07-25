@@ -1,19 +1,19 @@
 CC := i386-elf-gcc
 LD := i386-elf-ld
 
-CFLAGS := -m32 -ffreestanding
+CFLAGS := -g -m32 -ffreestanding -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -Wall -Wextra -Werror
 LDFLAGS := -m elf_i386
 
-SOURCE = $(wildcard kernel/*.c drivers/*.c common/*.c, cpu/*.c)
-HEADERS = $(wildcard kernel/*.h drivers/*.h common/*.h cpu/*.h)
+SOURCE = $(wildcard kernel/*.c drivers/*.c cpu/*.c libc/*.c)
+HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h libc/*.h)
 OBJ = ${SOURCE:.c=.o cpu/interrupt.o}
 
 all: clean run
 
-run: os-image.bin
-	qemu-system-i386 -drive file=os-image.bin,format=raw,index=0,if=floppy
+run: image.bin
+	qemu-system-i386 -drive file=image.bin,format=raw,index=0,if=floppy
 
-os-image.bin: boot/bootsect.bin kernel.bin
+image.bin: boot/bootsect.bin kernel.bin
 	cat $^ > $@
 
 kernel.bin: boot/kernel_entry.o ${OBJ}

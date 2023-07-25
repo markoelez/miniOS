@@ -1,5 +1,5 @@
-#ifndef LIBC_H
-#define LIBC_H
+#ifndef STRING_H
+#define STRING_H
 
 
 void itoa(int n, char* s);
@@ -7,7 +7,5 @@ void itoa(int n, char* s);
 int strlen(char* s);
 
 void reverse(char* s);
-
-void memcpy(char* src, char* dst, int nbytes);
 
 #endif

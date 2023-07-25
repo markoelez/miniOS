@@ -2,24 +2,7 @@
 #include "screen.h"
 #include "ports.h"
 #include "../cpu/isr.h"
-#include "../kernel/libc.h"
-
-static void keyboard_callback(registers_t regs)
-{
-    uint8 scancode = port_byte_in(0x60);
-    char* sc_ascii;
-    itoa(scancode, sc_ascii);
-    kprint("Keyboard scancode: ");
-    kprint(sc_ascii);
-    kprint(", ");
-    print_letter(scancode);
-    kprint("\n");
-}
-
-void init_keyboard()
-{
-   register_interrupt_handler(IRQ1, keyboard_callback); 
-}
+#include "../libc/string.h"
 
 void print_letter(uint8 scancode) {
     switch (scancode)
@@ -210,4 +193,21 @@ void print_letter(uint8 scancode) {
             } else kprint("Unknown key up");
             break;
     }
+}
+
+static void keyboard_callback(__attribute__((unused)) registers_t regs)
+{
+    uint8 scancode = port_byte_in(0x60);
+    char sc_ascii[4];
+    itoa(scancode, sc_ascii);
+    kprint("Keyboard scancode: ");
+    kprint(sc_ascii);
+    kprint(", ");
+    print_letter(scancode);
+    kprint("\n");
+}
+
+void init_keyboard()
+{
+   register_interrupt_handler(IRQ1, keyboard_callback); 
 }

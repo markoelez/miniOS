@@ -1,4 +1,4 @@
-#include "libc.h"
+#include "string.h"
 
 
 void itoa(int n, char* s)
@@ -34,9 +34,4 @@ void reverse(char* s)
         s[i] = s[j];
         s[j] = t;
     }
-};
-
-void memcpy(char* src, char* dst, int nbytes)
-{
-    for (int i = 0; i < nbytes; ++i) *(dst + i) = *(src + i);
 };

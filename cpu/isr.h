@@ -1,7 +1,7 @@
 #ifndef ISR_H
 #define ISR_H
 
-#include "../common/util.h"
+#include "util.h"
 
 extern void isr0();
 extern void isr1();

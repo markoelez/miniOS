@@ -1,6 +1,7 @@
 #include "screen.h"
 #include "ports.h"
-#include "../kernel/libc.h"
+#include "../libc/string.h"
+#include "../libc/mem.h"
 
 
 int get_offset(int row, int col)
@@ -41,7 +42,6 @@ int print_char(char c, int row, int col, char attr)
     unsigned char* screen = (unsigned char*) VIDEO_ADDRESS;
     if (!attr) attr = WHITE_ON_BLACK;
 
-    /* Error control: print a red 'E' if the coords aren't right */
     if (col >= MAX_COLS || row >= MAX_ROWS) {
         screen[2 * MAX_ROWS * MAX_COLS - 2] = 'E';
         screen[2 * MAX_ROWS * MAX_COLS - 1] = RED_ON_WHITE;
@@ -68,11 +68,11 @@ int print_char(char c, int row, int col, char attr)
     {
         int i;
         for (i = 1; i < MAX_ROWS; ++i) 
-            memcpy(get_offset(i, 0) + VIDEO_ADDRESS,
-                   get_offset(i - 1, 0) + VIDEO_ADDRESS,
+            memcpy((void*)(get_offset(i - 1, 0) + VIDEO_ADDRESS),
+                   (void*)(get_offset(i, 0) + VIDEO_ADDRESS),
                    MAX_COLS * 2);
 
-        char* last_line = get_offset(MAX_ROWS - 1, 0) + VIDEO_ADDRESS;
+        char* last_line = (char*)(get_offset(MAX_ROWS - 1, 0) + VIDEO_ADDRESS);
         for (i = 0; i < MAX_COLS * 2; ++i)
             last_line[i] = 0;
 
@@ -115,7 +115,6 @@ void kprint(char* str)
 void clear_screen()
 {
     int screen_size = MAX_ROWS * MAX_COLS;
-    int i;
     char* screen = VIDEO_ADDRESS;
 
     for (int i = 0; i < screen_size; i++)

@@ -4,7 +4,7 @@
 #define KERNEL_CS 0x08
 #define IDT_ENTRIES 256
 
-#include "../common/util.h"
+#include "util.h"
 
 
 typedef struct

@@ -1,4 +1,6 @@
 #include "../drivers/screen.h"
+#include "../drivers/keyboard.h"
+#include "../drivers/timer.h"
 #include "../cpu/isr.h"
 
 

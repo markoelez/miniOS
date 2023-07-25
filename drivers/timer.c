@@ -1,11 +1,12 @@
 #include "timer.h"
-#include "isr.h"
+#include "ports.h"
+#include "../cpu/isr.h"
 #include "../drivers/screen.h"
-#include "../kernel/libc.h"
+#include "../libc/string.h"
 
 uint32 tick = 0;
 
-static void timer_callback(registers_t regs)
+static void timer_callback(__attribute__((unused)) registers_t regs)
 {
     kprint("Tick: ");
     char tick_ascii[256];
