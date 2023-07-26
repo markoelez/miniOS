@@ -2,16 +2,13 @@
 #include "../drivers/keyboard.h"
 #include "../drivers/timer.h"
 #include "../cpu/isr.h"
+#include "../libc/string.h"
 
 
-int main() {
-
+void main()
+{
     isr_install();
+    irq_install();
 
-    asm volatile("sti");
-    init_timer(50);
-
-    init_keyboard();
-
-    return 0;
+    kprint("Type something, it will go through the kernel\nType QUIT to quit\n> ");
 }

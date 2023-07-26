@@ -8,11 +8,7 @@ uint32 tick = 0;
 
 static void timer_callback(__attribute__((unused)) registers_t regs)
 {
-    kprint("Tick: ");
-    char tick_ascii[256];
-    itoa(++tick, tick_ascii);
-    kprint(tick_ascii);
-    kprint("\n");
+    ++tick;
 }
 
 void init_timer(uint32 freq)
