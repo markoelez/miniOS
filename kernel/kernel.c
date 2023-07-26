@@ -10,5 +10,5 @@ void main()
     isr_install();
     irq_install();
 
-    kprint("Type something, it will go through the kernel\nType QUIT to quit\n> ");
+    kprint("Type QUIT to quit\n> ");
 }
