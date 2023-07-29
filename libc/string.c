@@ -1,12 +1,12 @@
 #include "string.h"
-
+#include <stddef.h>
 
 void itoa(int n, char* s)
 {
     int sign;
     if ((sign = n) < 0) n = -n;
 
-    int i = 0;
+    size_t i = 0;
     do
     {
         s[i++] = '0' + (n % 10);
@@ -20,14 +20,14 @@ void itoa(int n, char* s)
 
 int strlen(char* s)
 {
-    int i = 0;
+    size_t i = 0;
     while (s[i] != '\0') ++i;
     return i;
 }
 
 void reverse(char* s)
 {
-    int i, j;
+    size_t i, j;
     for (i = 0, j = strlen(s) - 1; i < j; ++i, --j)
     {
         char t = s[i];
@@ -38,7 +38,7 @@ void reverse(char* s)
 
 int strcmp(char* a, char* b)
 {
-    int i;
+    size_t i;
     for (i = 0; a[i] == b[i]; ++i)
         if (a[i] == '\0') return 0;
     return a[i] - b[i];

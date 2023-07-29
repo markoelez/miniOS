@@ -6,7 +6,7 @@
 
 uint32_t tick = 0;
 
-static void timer_callback(__attribute__((unused)) registers_t regs)
+static void timer_callback(__attribute__((unused)) registers_t* regs)
 {
     ++tick;
 }

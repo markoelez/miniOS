@@ -1,9 +1,9 @@
 #include "mem.h"
 
 
-void memcpy(void* dst, const void* src, int nbytes)
+void memcpy(void* dst, const void* src, size_t nbytes)
 {
     const char* csrc = (const char*)src;
     char* cdst = (char*)dst;
-    for (int i = 0; i < nbytes; ++i) *(cdst + i) = *(csrc + i);
+    for (size_t i = 0; i < nbytes; ++i) *(cdst + i) = *(csrc + i);
 };

@@ -4,6 +4,7 @@
 #include "../libc/mem.h"
 
 #include <stdint.h>
+#include <stddef.h>
 
 
 int get_offset(int row, int col)
@@ -74,7 +75,7 @@ int print_char(char c, int row, int col, char attr)
 
     if (offset >= MAX_ROWS * MAX_COLS * 2)
     {
-        int i;
+        size_t i;
         for (i = 1; i < MAX_ROWS; ++i)
             memcpy((void*)(get_offset(i - 1, 0) + VIDEO_ADDRESS),
                 (void*)(get_offset(i, 0) + VIDEO_ADDRESS),
@@ -106,7 +107,7 @@ void kprint_at(char* str, int row, int col)
         col = get_offset_col(offset);
     }
 
-    int i = 0;
+    size_t i = 0;
     while (str[i] != 0)
     {
         offset = print_char(str[i++], row, col, WHITE_ON_BLACK);
@@ -130,10 +131,10 @@ void kprint_bs()
 
 void clear_screen()
 {
-    int screen_size = MAX_ROWS * MAX_COLS;
+    size_t screen_size = MAX_ROWS * MAX_COLS;
     char* screen = VIDEO_ADDRESS;
 
-    for (int i = 0; i < screen_size; i++)
+    for (size_t i = 0; i < screen_size; i++)
     {
         screen[i * 2] = ' ';
     }

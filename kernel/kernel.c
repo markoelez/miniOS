@@ -8,7 +8,7 @@
 
 void kernel_main()
 {
-    bool tm = false;
+    bool tm = true;
 
     clear_screen();
 
