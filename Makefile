@@ -1,7 +1,7 @@
 CC := i386-elf-gcc
 LD := i386-elf-ld
 
-CFLAGS := -g -m32 -ffreestanding -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -Wall -Wextra -Werror
+CFLAGS := -g -m32 -ffreestanding -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -Wall -Wextra -Werror
 LDFLAGS := -m elf_i386
 
 SOURCE = $(wildcard kernel/*.c drivers/*.c cpu/*.c libc/*.c)

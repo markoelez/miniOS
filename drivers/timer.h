@@ -3,6 +3,8 @@
 
 #include "../cpu/util.h"
 
-void init_timer(uint32 freq);
+#include <stdint.h>
+
+void init_timer(uint32_t freq);
 
 #endif

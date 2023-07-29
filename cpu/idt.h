@@ -6,23 +6,25 @@
 
 #include "util.h"
 
+#include <stdint.h>
+
 
 typedef struct
 {
-    uint16 low_offset; 
-    uint16 sel;
-    uint8 always0;
-    uint8 flags; 
-    uint16 high_offset;
-} __attribute__((packed)) idt_gate_t ;
+    uint16_t low_offset;
+    uint16_t sel;
+    uint8_t always0;
+    uint8_t flags;
+    uint16_t high_offset;
+} __attribute__((packed)) idt_gate_t;
 
 typedef struct
 {
-    uint16 limit;
-    uint32 base;
+    uint16_t limit;
+    uint32_t base;
 } __attribute__((packed)) idt_register_t;
 
-void set_idt_gate(int n, uint32 handler);
+void set_idt_gate(int n, uint32_t handler);
 
 void set_idt();
 

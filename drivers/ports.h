@@ -3,7 +3,9 @@
 
 #include "../cpu/util.h"
 
-unsigned char port_byte_in(unsigned short port);
-void port_byte_out(unsigned short port, unsigned char data);
+#include <stdint.h>
+
+uint8_t inportb(uint16_t port);
+void outportb(uint16_t port, uint8_t data);
 
 #endif

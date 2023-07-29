@@ -1,13 +1,13 @@
 #include "ports.h"
 
-uint8 port_byte_in (uint16 port)
+uint8_t inportb(uint16_t port)
 {
-    uint8 result;
+    uint8_t result;
     asm("in %%dx, %%al" : "=a" (result) : "d" (port));
     return result;
 }
 
-void port_byte_out (uint16 port, uint8 data)
+void outportb(uint16_t port, uint8_t data)
 {
     asm volatile("out %%al, %%dx" : : "a" (data), "d" (port));
 }

@@ -21,7 +21,7 @@ const char sc_ascii[] = { '?', '?', '1', '2', '3', '4', '5', '6',
 
 static void keyboard_callback(__attribute__((unused)) registers_t regs)
 {
-    uint8 sc = port_byte_in(0x60);
+    uint8_t sc = inportb(0x60);
 
     if (sc > SC_MAX) return;
 

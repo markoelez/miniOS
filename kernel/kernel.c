@@ -3,12 +3,26 @@
 #include "../drivers/timer.h"
 #include "../cpu/isr.h"
 #include "../libc/string.h"
+#include <stdbool.h>
 
 
-void main()
+void kernel_main()
 {
+    bool tm = false;
+
+    clear_screen();
+
+    if (tm)
+    {
+        kprint("Starting in text mode...\n");
+    }
+    else
+    {
+        kprint("Starting in graphical mode...\n");
+    }
+
+    kprint("MiniOS v0.1\n\n");
+
     isr_install();
     irq_install();
-
-    kprint("Type QUIT to quit\n> ");
 }

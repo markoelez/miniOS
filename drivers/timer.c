@@ -4,23 +4,23 @@
 #include "../drivers/screen.h"
 #include "../libc/string.h"
 
-uint32 tick = 0;
+uint32_t tick = 0;
 
 static void timer_callback(__attribute__((unused)) registers_t regs)
 {
     ++tick;
 }
 
-void init_timer(uint32 freq)
+void init_timer(uint32_t freq)
 {
 
     register_interrupt_handler(IRQ0, timer_callback);
 
-    uint32 divisor = 1193180 / freq;
-    uint8 low  = (uint8)(divisor & 0xFF);
-    uint8 high = (uint8)((divisor >> 8) & 0xFF);
-    
-    port_byte_out(0x43, 0x36);
-    port_byte_out(0x40, low);
-    port_byte_out(0x40, high);
+    uint32_t divisor = 1193180 / freq;
+    uint8_t low = (uint8_t)(divisor & 0xFF);
+    uint8_t high = (uint8_t)((divisor >> 8) & 0xFF);
+
+    outportb(0x43, 0x36);
+    outportb(0x40, low);
+    outportb(0x40, high);
 }

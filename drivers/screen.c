@@ -3,6 +3,8 @@
 #include "../libc/string.h"
 #include "../libc/mem.h"
 
+#include <stdint.h>
+
 
 int get_offset(int row, int col)
 {
@@ -21,20 +23,20 @@ int get_offset_col(int offset)
 
 int get_cursor_offset()
 {
-    port_byte_out(REG_SCREEN_CTRL, 14);
-    int offset = port_byte_in(REG_SCREEN_DATA) << 8;
-    port_byte_out(REG_SCREEN_CTRL, 15);
-    offset += port_byte_in(REG_SCREEN_DATA);
+    outportb(REG_SCREEN_CTRL, 14);
+    int offset = inportb(REG_SCREEN_DATA) << 8;
+    outportb(REG_SCREEN_CTRL, 15);
+    offset += inportb(REG_SCREEN_DATA);
     return offset * 2;
 }
 
 void set_cursor_offset(int offset)
 {
     offset /= 2;
-    port_byte_out(REG_SCREEN_CTRL, 14);
-    port_byte_out(REG_SCREEN_DATA, (uint8)(offset >> 8));
-    port_byte_out(REG_SCREEN_CTRL, 15);
-    port_byte_out(REG_SCREEN_DATA, (uint8)(offset & 0xff));
+    outportb(REG_SCREEN_CTRL, 14);
+    outportb(REG_SCREEN_DATA, (uint8_t)(offset >> 8));
+    outportb(REG_SCREEN_CTRL, 15);
+    outportb(REG_SCREEN_DATA, (uint8_t)(offset & 0xff));
 }
 
 int print_char(char c, int row, int col, char attr)
@@ -134,7 +136,6 @@ void clear_screen()
     for (int i = 0; i < screen_size; i++)
     {
         screen[i * 2] = ' ';
-        // screen[i * 2 + 1] = WHITE_ON_BLACK;
     }
     set_cursor_offset(get_offset(0, 0));
 };
