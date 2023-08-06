@@ -1,33 +1,74 @@
-CC := i386-elf-gcc
-LD := i386-elf-ld
+export
 
-CFLAGS := -g -m32 -ffreestanding -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -Wall -Wextra -Werror
-LDFLAGS := -m elf_i386
+OS=miniOS
+HOST=i386-elf
+PREFIX=usr
+BOOTDIR=boot
+ISODIR=out
+ISO=$(PWD)/$(ISODIR)
+SYSROOTDIR=sysroot
+SYSROOT=$(PWD)/$(SYSROOTDIR)
 
-SOURCE = $(wildcard kernel/*.c drivers/*.c cpu/*.c libc/*.c)
-HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h libc/*.h)
-OBJ = ${SOURCE:.c=.o cpu/interrupt.o}
+GRUBCFG=$(ISODIR)/boot/grub/grub.cfg
 
-all: clean run
+INCLUDEDIR=$(SYSROOT)/$(PREFIX)/include
+LIBDIR=$(SYSROOT)/$(PREFIX)/lib
 
-run: image.bin
-	qemu-system-i386 -drive file=image.bin,format=raw,index=0,if=floppy
+PATH:=$(PATH):/sbin:$(PWD)/toolchain/compiler/bin
 
-image.bin: boot/bootsect.bin kernel.bin
-	cat $^ > $@
+MAKE:=$(MAKE) -s
+LD=$(HOST)-ld
+AR=$(HOST)-ar
+AS=$(HOST)-as
+CC=$(HOST)-gcc
 
-kernel.bin: boot/kernel_entry.o ${OBJ}
-	${LD} ${LDFLAGS} -o $@ -Ttext 0x1000 $^ --oformat binary
+CFLAGS=-O1 -std=gnu11 -ffreestanding -Wall -Wextra
+ASFLAGS=--32
+LDFLAGS=-nostdlib -L$(SYSROOT)/usr/lib -m elf_i386
 
-%.o: %.c ${HEADERS}
-	${CC} ${CFLAGS} -c $< -o $@
+CC+=--sysroot=$(SYSROOT) -isystem=/$(PREFIX)/include
 
-%.o: %.asm
-	nasm $< -f elf -o $@
+PROJECTS=libc kernel
+# Generate project sub-targets
+PROJECT_HEADERS=$(PROJECTS:=.headers) # appends .headers to every project name
+PROJECT_CLEAN=$(PROJECTS:=.clean)
 
-%.bin: %.asm
-	nasm $< -f bin -o $@
+all: clean build $(OS).iso qemu
 
-clean:
-	find . -name "*.o" -type f -delete
-	find . -name "*.bin" -type f -delete
+build: $(PROJECTS)
+
+# Copy headers before building anything
+$(PROJECTS): $(PROJECT_HEADERS) | $(LIBDIR)
+	@$(MAKE) -C $@ build
+
+clean: $(PROJECT_CLEAN)
+	@rm -rf $(SYSROOTDIR)
+	@rm -rf $(ISODIR)
+	@rm -rf $(OS).iso
+	@rm -rf grub.cfg
+
+$(GRUBCFG):
+	$(info [all] generating grub config)
+	@mkdir -p $(ISODIR)/boot/grub
+	@bash ./grub_config.sh
+
+$(OS).iso: $(PROJECTS) $(GRUBCFG)
+	$(info [all] writing $@)
+	@grub-mkrescue -o $(OS).iso $(ISODIR) 2> /dev/null
+
+qemu: $(OS).iso
+	qemu-system-x86_64 -cdrom $(OS).iso -monitor stdio -s -no-reboot -no-shutdown -serial file:serial.log
+	cat serial.log
+
+$(INCLUDEDIR):
+	@mkdir -p $(INCLUDEDIR)
+
+$(LIBDIR):
+	@mkdir -p $(LIBDIR)
+
+# Automatic rules for our generated sub-targets
+%.headers: %/ | $(INCLUDEDIR)
+	@$(MAKE) -C $< install-headers
+
+%.clean: %/
+	@$(MAKE) -C $< clean

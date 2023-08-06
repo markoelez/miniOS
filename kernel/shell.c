@@ -1,6 +1,6 @@
-#include "shell.h"
-#include "../drivers/screen.h"
-#include "../libc/string.h"
+#include <kernel/shell.h>
+#include <kernel/screen.h>
+#include <libc/string.h>
 
 
 void user_input(char* input)

@@ -4,7 +4,7 @@
 #define KERNEL_CS 0x08
 #define IDT_ENTRIES 256
 
-#include "util.h"
+#include <kernel/util.h>
 
 #include <stdint.h>
 

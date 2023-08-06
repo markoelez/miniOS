@@ -1,7 +1,7 @@
-#include "screen.h"
-#include "ports.h"
-#include "../libc/string.h"
-#include "../libc/mem.h"
+#include <kernel/screen.h>
+#include <kernel/ports.h>
+#include <libc/string.h>
+#include <libc/mem.h>
 
 #include <stdint.h>
 #include <stddef.h>

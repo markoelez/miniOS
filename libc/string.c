@@ -1,4 +1,4 @@
-#include "string.h"
+#include <libc/string.h>
 #include <stddef.h>
 
 void itoa(int n, char* s)

@@ -1,4 +1,4 @@
-#include "idt.h"
+#include <kernel/idt.h>
 
 
 idt_gate_t idt[IDT_ENTRIES];

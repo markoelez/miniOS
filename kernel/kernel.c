@@ -1,13 +1,11 @@
-#include "../drivers/screen.h"
-#include "../drivers/keyboard.h"
-#include "../drivers/timer.h"
-#include "../cpu/isr.h"
-#include "../libc/string.h"
+#include <kernel/screen.h>
+#include <libc/string.h>
 #include <stdbool.h>
 
 
 void kernel_main()
 {
+    // TODO: add graphical mode support.
     bool tm = true;
 
     clear_screen();
@@ -22,7 +20,4 @@ void kernel_main()
     }
 
     kprint("MiniOS v0.1\n\n");
-
-    isr_install();
-    irq_install();
 }

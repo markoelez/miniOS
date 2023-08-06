@@ -1,3 +1,7 @@
+sysroot
+out
+*.log
+*.iso
 .vscode/
 *.o
 *.bin
